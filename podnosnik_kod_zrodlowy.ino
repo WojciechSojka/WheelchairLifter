@@ -54,13 +54,13 @@ void loop () {
         stop_motor(motor_2_PWM);
     }
     if (joystick_mode){ 
-      run_motor_joystick(motor_1_DIR, motor_1_PWM, -value);
-      run_motor_joystick(motor_2_DIR, motor_2_PWM, -value);
+      run_motor_joystick(motor_1_DIR, motor_1_PWM, -level_value);
+      run_motor_joystick(motor_2_DIR, motor_2_PWM, -level_value);
       Serial.print ("Speed=");
       Serial.println (level_value);
     }
    
-    else {, 
+    else {
       if (ispressed (up_button)){
           run_motor_forward(motor_1_DIR, motor_1_PWM);
           run_motor_forward(motor_2_DIR, motor_2_PWM);
@@ -93,7 +93,7 @@ void loop () {
 }
 
 
-void run_motor_joystick(int pin_dir, int pwm_dir, value){
+void run_motor_joystick(int pin_dir, int pwm_dir, int value){
    if (value > 0) digitalWrite(pin_dir, HIGH);
    else digitalWrite(pin_dir, LOW);
    analogWrite(pwm_dir, value);
