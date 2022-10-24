@@ -3,10 +3,10 @@
 #define level_stick A0
 #define vertical_stick A1
 #define stick_button 8
-int up_button = 2;
-int right_button = 3;
-int down_button = 6;
-int left_button = 5;
+int r_button = 2;
+int d_button = 3;
+int l_button = 6;
+int u_button = 5;
 int vertical_value=0;   
 int level_value=0;      
 int vertical_valuep=0;  
@@ -24,10 +24,10 @@ void setup () {
     pinMode (level_stick, INPUT);
     pinMode (vertical_stick, INPUT);
 
-    pinMode (up_button, INPUT);
-    pinMode (down_button, INPUT);
-    pinMode (left_button, INPUT);
-    pinMode (right_button, INPUT);
+    pinMode (r_button, INPUT);
+    pinMode (l_button, INPUT);
+    pinMode (d_button, INPUT);
+    pinMode (u_button, INPUT);
     pinMode (motor_1_DIR, OUTPUT);
     pinMode (motor_2_DIR, OUTPUT);
     pinMode (motor_1_PWM, OUTPUT);
@@ -59,24 +59,24 @@ void loop () {
       Serial.print ("Speed=");
       Serial.println (level_value);
     }
-    else if (ispressed (down_button)){
+    else if (ispressed (l_button)){
         joystick_mode = !joystick_mode;
         stop_motor(motor_1_PWM);
         stop_motor(motor_2_PWM);
         Serial.println ("left pressed. Switch to joystick.");
         }   
     else {
-      if (ispressed (up_button)){
+      if (ispressed (r_button)){
           stop_motor(motor_1_PWM);
           stop_motor(motor_2_PWM);
           Serial.println ("right pressed. Stop motor");
           }
-      if (ispressed (left_button)){ 
+      if (ispressed (d_button)){ 
           run_motor_backward(motor_1_DIR, motor_1_PWM);
           run_motor_backward(motor_2_DIR, motor_2_PWM);
           Serial.println ("down pressed. Move backward");
           }
-      if (ispressed (right_button)){
+      if (ispressed (u_button)){
           run_motor_forward(motor_1_DIR, motor_1_PWM);
           run_motor_forward(motor_2_DIR, motor_2_PWM);
           Serial.println ("up pressed. Move forward");
