@@ -11,7 +11,7 @@ int vertical_value=0;
 int level_value=0;      
 int vertical_valuep=0;  
 int level_valuep=0;    
-bool joystick_mode=false;
+bool joystick_mode=true;
 bool clicking_mode=false;
 uint16_t key_delay_time = 100; 
 int motor_1_PWM = 11;
@@ -54,40 +54,33 @@ void loop () {
         stop_motor(motor_2_PWM);
     }
     if (joystick_mode){ 
-      run_motor_joystick(motor_1_DIR, motor_1_PWM, -level_value);
-      run_motor_joystick(motor_2_DIR, motor_2_PWM, -level_value);
+      run_motor_joystick(motor_1_DIR, motor_1_PWM, level_value);
+      run_motor_joystick(motor_2_DIR, motor_2_PWM, level_value);
       Serial.print ("Speed=");
       Serial.println (level_value);
     }
-   
+    else if (ispressed (down_button)){
+        joystick_mode = !joystick_mode;
+        stop_motor(motor_1_PWM);
+        stop_motor(motor_2_PWM);
+        Serial.println ("left pressed. Switch to joystick.");
+        }   
     else {
       if (ispressed (up_button)){
-          run_motor_forward(motor_1_DIR, motor_1_PWM);
-          run_motor_forward(motor_2_DIR, motor_2_PWM);
-          Serial.println ("up pressed");
-          }
-      if (clicking_mode){
           stop_motor(motor_1_PWM);
           stop_motor(motor_2_PWM);
-          clicking_mode = false;
-        }
-      if (ispressed (down_button)){
-          run_motor_backward(motor_1_DIR, motor_1_PWM);
-          run_motor_backward(motor_2_DIR, motor_2_PWM);
-          clicking_mode = true;
-          Serial.println ("down pressed");
+          Serial.println ("right pressed. Stop motor");
           }
       if (ispressed (left_button)){ 
           run_motor_backward(motor_1_DIR, motor_1_PWM);
           run_motor_backward(motor_2_DIR, motor_2_PWM);
-          Serial.println ("left pressed");
+          Serial.println ("down pressed. Move backward");
           }
       if (ispressed (right_button)){
-          run_motor_backward(motor_1_DIR, motor_1_PWM);
-          run_motor_backward(motor_2_DIR, motor_2_PWM);
-          Serial.println ("right pressed");
+          run_motor_forward(motor_1_DIR, motor_1_PWM);
+          run_motor_forward(motor_2_DIR, motor_2_PWM);
+          Serial.println ("up pressed. Move forward");
           }
-
     }
     delay (10);
 }
@@ -96,9 +89,9 @@ void loop () {
 void run_motor_joystick(int pin_dir, int pwm_dir, int value){
    if (value > 0) digitalWrite(pin_dir, HIGH);
    else digitalWrite(pin_dir, LOW);
-   analogWrite(pwm_dir, value);
-   
-  }
+   if (value == 0) digitalWrite(pwm_dir, LOW);
+   else digitalWrite(pwm_dir, HIGH);   
+     }
 void run_motor_forward(int pin_dir, int pin_pwm){
     digitalWrite(pin_dir, HIGH);
     digitalWrite(pin_pwm, HIGH);
